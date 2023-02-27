@@ -11,7 +11,8 @@
 #define SERVICE_DATA_LEN        5
 #define SERVICE_UUID            0xfcd2		// BTHome service UUID
 
-#define DOOR_PIN                2
+#define DOOR_PIN1               2
+#define DOOR_PIN2               26
 
 static const struct device *gpio_port0_dev = DEVICE_DT_GET(DT_NODELABEL(gpio0));
 
@@ -54,7 +55,8 @@ void init(void)
 {
 	int err;
 
-    gpio_pin_configure(gpio_port0_dev, DOOR_PIN, GPIO_INPUT | GPIO_PULL_DOWN);
+	gpio_pin_configure(gpio_port0_dev, DOOR_PIN1, GPIO_INPUT | GPIO_PULL_UP);
+	gpio_pin_configure(gpio_port0_dev, DOOR_PIN2, GPIO_OUTPUT);
 	
 	/* Initialize the Bluetooth Subsystem */
 	err = bt_enable(bt_ready);
@@ -72,8 +74,11 @@ void main(void)
 	init();
 
 	for (;;) {
-		int door_state = gpio_pin_get(gpio_port0_dev, DOOR_PIN);
-		service_data[4] = (door_state ^ 1) & 0xff;
+		gpio_pin_set(gpio_port0_dev, DOOR_PIN2, 0);
+		k_sleep(K_MSEC(5));
+		int door_state = gpio_pin_get(gpio_port0_dev, DOOR_PIN1);
+		gpio_pin_set(gpio_port0_dev, DOOR_PIN2, 1);
+		service_data[4] = door_state & 0xff;
 		err = bt_le_adv_update_data(ad, ARRAY_SIZE(ad), NULL, 0);
 		if (err) {
 			printk("Failed to update advertising data (err %d)\n", err);
