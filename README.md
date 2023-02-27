@@ -1,10 +1,10 @@
 # bthome_nrf_door
-BTHome door sensor using the nRF52
+BTHome door sensor using the nRF52840
 
-This project implements a [BTHome](https://bthome.io/) door sensor with nRF52.
+This project implements a [BTHome](https://bthome.io/) door sensor with nRF52840.
 
-It assumes that a digital signal is connected to GPIO0.2 that is 1 when the door is
-closed and 0 when the door is open.
+It assumes that a (NC) relay is connected between GPIO0.2 and GPIO0.26 of the nRF52.
+
 
 # Building
 
