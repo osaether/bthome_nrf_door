@@ -8,7 +8,6 @@
 #include <zephyr/bluetooth/uuid.h>
 #include <zephyr/drivers/gpio.h>
 
-#define SERVICE_DATA_LEN        5
 #define SERVICE_UUID            0xfcd2		// BTHome service UUID
 
 #define DOOR_PIN1               2
@@ -21,7 +20,7 @@ static const struct device *gpio_port0_dev = DEVICE_DT_GET(DT_NODELABEL(gpio0));
 					     BT_GAP_ADV_SLOW_INT_MIN, \
 					     BT_GAP_ADV_SLOW_INT_MAX, NULL)
 
-static uint8_t service_data[SERVICE_DATA_LEN] = { 
+static uint8_t service_data[] = { 
 	BT_UUID_16_ENCODE(SERVICE_UUID),
 	0x40,
 	0x1A,	// Door
